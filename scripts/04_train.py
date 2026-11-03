@@ -105,10 +105,17 @@ def info_nce(a: torch.Tensor, b: torch.Tensor, temperature: float = 0.2) -> torc
 
 
 def load_data(graph_path: Path, device: torch.device):
+    graph_path = Path(graph_path).resolve()
+    repo_root = graph_path.parent.parent
     data = json.loads(graph_path.read_text())
     patches = []
     for p in data["patch_paths"]:
-        patches.append(np.load(p))
+        pp = Path(p)
+        if not pp.is_file():
+            pp = repo_root / p
+        if not pp.is_file():
+            pp = graph_path.parent.parent / "patches" / Path(p).name
+        patches.append(np.load(pp))
     x = torch.from_numpy(np.stack(patches)[:, None, ...]).float().to(device)
     attrs = torch.tensor(data["attrs"], dtype=torch.float32, device=device)
     # z-score attrs
@@ -227,9 +234,10 @@ def train_one(mode: str, x, attrs, y, edges, masks, args, device):
 
 
 def main() -> None:
+    root = Path(__file__).resolve().parents[1]
     ap = argparse.ArgumentParser()
-    ap.add_argument("--graph", type=Path, default=Path("/tzq2/code/dataset/lung_nodule_mag/data/graph_split.json"))
-    ap.add_argument("--out", type=Path, default=Path("/tzq2/code/dataset/lung_nodule_mag/logs/pilot_results.json"))
+    ap.add_argument("--graph", type=Path, default=root / "data" / "graph_split.json")
+    ap.add_argument("--out", type=Path, default=root / "logs" / "pilot_results.json")
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--emb-dim", type=int, default=64)

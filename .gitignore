@@ -1,5 +1,5 @@
 ﻿__pycache__/
-*.pyc
+*.py[cod]
 .Python
 .venv/
 venv/
@@ -7,8 +7,8 @@ venv/
 *.pt
 *.pth
 *.ckpt
-data/
-patches/
-logs/
-*.csv
-*.json
+*.mhd
+*.raw
+*.zraw
+.DS_Store
+Thumbs.db

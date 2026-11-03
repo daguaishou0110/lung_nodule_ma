@@ -19,8 +19,9 @@ def load_train_mod():
 
 
 def main() -> None:
+    root = Path(__file__).resolve().parents[1]
     ap = argparse.ArgumentParser()
-    ap.add_argument("--graph", type=Path, default=Path("/tzq2/code/dataset/lung_nodule_mag/data/graph_split.json"))
+    ap.add_argument("--graph", type=Path, default=root / "data" / "graph_split.json")
     ap.add_argument("--out", type=Path, required=True)
     ap.add_argument("--device", default="cuda:0")
     ap.add_argument("--epochs", type=int, default=80)
