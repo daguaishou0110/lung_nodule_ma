@@ -1,0 +1,14 @@
+﻿__pycache__/
+*.pyc
+.Python
+.venv/
+venv/
+.env
+*.pt
+*.pth
+*.ckpt
+data/
+patches/
+logs/
+*.csv
+*.json
